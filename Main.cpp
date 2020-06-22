@@ -1,4 +1,4 @@
-#include <iostream>
+п»ї#include <iostream>
 #include <chrono>
 #include <thread>
 
@@ -22,7 +22,7 @@ void game_init() {
 	game->setViZDoomPath("../vizdoom/vizdoom");
 	game->setDoomGamePath("../vizdoom/freedoom2.wad");
 	game->loadConfig("../vizdoom/scenarios/task1.cfg"); // add configurations for game
-	game->setScreenResolution(RES_640X480); // разрешение
+	game->setScreenResolution(RES_640X480); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	game->setLabelsBufferEnabled(1); // add this
 	game->setWindowVisible(1); // exception with Linux without X Series
 	game->setRenderWeapon(1); // is the gun will be in the game
@@ -35,7 +35,7 @@ struct crd {
 };
 
 crd getCrdMonstr(IplImage* img, const int& width, const int& height, GameStatePtr state) {
-	crd sum{0, 0};
+	crd sum{ 0, 0 };
 	std::cout << sum.x << ' ' << sum.y << std::endl;
 	long long counter = 0;
 	cv::Mat m = cv::Mat(width, height, CV_8UC1);
@@ -71,7 +71,7 @@ void find_demon_and_kill(GameStatePtr state) {
 	}
 }
 
-CvPoint find(cv::Mat matrix){
+CvPoint find(cv::Mat matrix) {
 	CvPoint sum = cvPoint(0, 0);
 	int counter = 0;
 	for (int y = 200; y < 210; y++) {
@@ -117,7 +117,7 @@ int main() {
 		while (!game->isEpisodeFinished()) {
 			auto state = game->getState();
 			auto screenBuf = state->screenBuffer;
-			
+
 			//cvSetImageROI(image, CvRect rect);
 
 			//find_demon_and_kill(state);
@@ -185,9 +185,9 @@ int main() {
 //
 //int main(int argc, char* argv[])
 //{
-//	// имя картинки задаётся первым параметром
+//	// пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 //	char filename[] = "D:\\hh.jpg";
-//	// получаем картинку
+//	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 //	image = cvLoadImage(filename, 1);
 //
 //	printf("[i] image: %s\n", filename);
@@ -197,7 +197,7 @@ int main() {
 //	cvNamedWindow("ROI", CV_WINDOW_AUTOSIZE);
 //	//cvNamedWindow("del", CV_WINDOW_AUTOSIZE);
 //
-//	// задаём ROI
+//	// пїЅпїЅпїЅпїЅпїЅ ROI
 //	crd A{ 20, 20 }, B{ 60, 60 }, C{ 80, 20 }, D{ 120, 60 };
 //
 //	paste = cvCloneImage(image);
@@ -217,12 +217,11 @@ int main() {
 //	cvShowImage("ROI", paste);
 //	//cvShowImage("del", del);
 //
-//	// ждём нажатия клавиши
+//	// пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 //	cvWaitKey(0);
 //
-//	// освобождаем ресурсы
+//	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 //	cvReleaseImage(&image);
 //	cvDestroyAllWindows();
 //	return 0;
 //}
-
