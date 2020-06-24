@@ -11,16 +11,16 @@ DoomGame* game = new DoomGame();
 size_t sleepTime = 1000 / DEFAULT_TICRATE;
 
 const std::vector<double> actions[4] = {
-	{ 1, 0, 0, 0 },
-	{ 0, 1, 0, 0 },
-	{ 0, 0, 1, 0 },
-	{ 0, 0, 0, 1 },
+	{ 1, 0, 0, 0 }, 
+	{ 0, 1, 0, 0 }, 
+	{ 0, 0, 1, 0 }, 
+	{ 0, 0, 0, 1 }, 
 };
 
 void game_init() {
 	game->setViZDoomPath("../vizdoom/vizdoom");
 	game->setDoomGamePath("../vizdoom/freedoom2.wad");
-	game->loadConfig("../vizdoom/scenarios/task3.cfg");
+	game->loadConfig("../vizdoom/scenarios/task3.cfg"); 
 	game->init();
 }
 
@@ -45,7 +45,7 @@ void mksquare(cv::Mat& scr, const cv::Point2f& p, const int& channel, const int&
 			if ((i + p.x > -1) && (i + p.x < 640) && (j + p.y > -1) && (j + p.y < 480)) {
 				int dis = distance(p, cvPoint(i + p.x, j + p.y));
 				if (dis < maxr && dis > minr)
-					scr.at<cv::Vec3b>(j + p.y, i + p.x)[channel] = 255;
+					scr.at<cv::Vec3b>(j + p.y, i + p.x)[channel] = 255; 
 			}
 		}
 	}
@@ -71,7 +71,7 @@ int main() {
 		while (!game->isEpisodeFinished()) {
 			auto state = game->getState();
 			auto screenBuf = state->screenBuffer;
-
+			
 			std::memcpy(scr.data, screenBuf->data(), screenBuf->size());
 			cv::extractChannel(scr, greyscale, 2);
 			cv::threshold(greyscale, greyscale, 200, 255, cv::THRESH_BINARY);
@@ -98,8 +98,8 @@ int main() {
 						index = j;
 					}
 				}
-
-
+				
+				
 				mksquare(scr, centers[index], 1, 6, 8);
 				_move(centers[index]);
 			}
