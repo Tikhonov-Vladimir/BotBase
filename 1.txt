@@ -8,6 +8,7 @@
 using namespace vizdoom;
 
 DoomGame* game = new DoomGame();
+
 const std::vector<double> actions[3] = {
 	{ 1, 0, 0 },
 	{ 0, 1, 0 },
@@ -28,14 +29,14 @@ void game_init() {
 	game->init();
 }
 
-CvPoint find(cv::Mat matrix) {
+CvPoint find(cv::Mat& matrix) {
 	CvPoint sum = cvPoint(0, 0);
 	int counter = 0;
 	for (int y = 200; y < 210; y++) {
-		for (int x = 30; x < (&matrix)->cols - 30; x++) {
+		for (int x = 0; x < (&matrix)->cols; x++) {
 			if (matrix.at<unsigned char>(y, x) == 255) {
 				sum.x += x + 10;
-				sum.y += y;
+				//sum.y += y;
 				return sum;
 			}
 		}
@@ -65,9 +66,14 @@ int main() {
 	auto scr = cv::Mat(480, 640, CV_8UC3);
 	auto greyscale = cv::Mat(480, 640, CV_8UC1);
 	int res = 0;
+	cvNamedWindow("Origin");
+	cv::moveWindow("Origin", 80, 30);
+	cvNamedWindow("Changed");
+	cv::moveWindow("Changed", 720, 30);
 
 	int episodes = 10;
-	size_t sleepTime = 2000 / DEFAULT_TICRATE;
+	size_t sleepTime = 1000 / DEFAULT_TICRATE;
+
 	for (int i = 0; i < episodes; ++i) {
 		std::cout << "Episode #" << i + 1 << "\n";
 		game->newEpisode();
@@ -75,12 +81,15 @@ int main() {
 			auto state = game->getState();
 			auto screenBuf = state->screenBuffer;
 
-			std::memcpy(scr.data, state->screenBuffer->data(), state->screenBuffer->size());
+			std::memcpy(scr.data, screenBuf->data(), screenBuf->size());
 			cv::extractChannel(scr, greyscale, 1);
 			cv::threshold(greyscale, greyscale, 130, 255, cv::THRESH_BINARY);
 
 			CvPoint w = find(greyscale);
 			kill(w.x);
+
+			cv::imshow("Origin", scr);
+			cv::imshow("Changed", greyscale);
 
 			cvWaitKey(sleepTime);
 		}
