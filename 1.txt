@@ -9,9 +9,9 @@ using namespace vizdoom;
 
 DoomGame* game = new DoomGame();
 const std::vector<double> actions[3] = {
-	{ 1, 0, 0 }, // left
-	{ 0, 1, 0 }, // right
-	{ 0, 0, 1 }, // shoot
+	{ 1, 0, 0 },
+	{ 0, 1, 0 },
+	{ 0, 0, 1 },
 };
 
 void sleep(size_t time) {
@@ -21,54 +21,11 @@ void sleep(size_t time) {
 void game_init() {
 	game->setViZDoomPath("../vizdoom/vizdoom");
 	game->setDoomGamePath("../vizdoom/freedoom2.wad");
-	game->loadConfig("../vizdoom/scenarios/task1.cfg"); // add configurations for game
-	game->setScreenResolution(RES_640X480); // ����������
-	game->setLabelsBufferEnabled(1); // add this
-	game->setWindowVisible(1); // exception with Linux without X Series
-	game->setRenderWeapon(1); // is the gun will be in the game
+	game->loadConfig("../vizdoom/scenarios/task1.cfg");
+	game->setLabelsBufferEnabled(1);
+	game->setRenderWeapon(1);
 	game->setRenderHud(1);
 	game->init();
-}
-
-struct crd {
-	long long x = 0, y = 0;
-};
-
-crd getCrdMonstr(IplImage* img, const int& width, const int& height, GameStatePtr state) {
-	crd sum{ 0, 0 };
-	std::cout << sum.x << ' ' << sum.y << std::endl;
-	long long counter = 0;
-	cv::Mat m = cv::Mat(width, height, CV_8UC1);
-	m = cv::cvarrToMat(img);
-	cvNamedWindow("original2", CV_WINDOW_AUTOSIZE);
-	std::memcpy(m.data, state->screenBuffer->data(), state->screenBuffer->size());
-	system("pause >nul");
-	for (int x = 200; x < 250/*height*/; ++x) {
-		for (int y = 0; y < width; ++y) {
-			if (m.at<unsigned char>(x, y) < 100) {
-				sum.x += x;
-				sum.y += y;
-				++counter;
-			}
-		}
-	}
-	sum.x = long long(double(sum.x) / counter);
-	sum.y = long long(double(sum.y) / counter);
-	std::cout << sum.x << ' ' << sum.y << std::endl;
-	return sum;
-}
-
-void find_demon_and_kill(GameStatePtr state) {
-	double eps = 10; // monster's width
-	if (state->labels[0].objectPositionY - eps > state->labels[1].objectPositionY) {
-		game->makeAction(actions[0]); //left
-	}
-	else if (state->labels[0].objectPositionY + eps < state->labels[1].objectPositionY) {
-		game->makeAction(actions[1]); //right
-	}
-	else {
-		game->makeAction(actions[2]); // shoot
-	}
 }
 
 CvPoint find(cv::Mat matrix) {
@@ -82,7 +39,7 @@ CvPoint find(cv::Mat matrix) {
 				return sum;
 			}
 		}
-		//std::cout << sum.x << ' ' << sum.y << "\n";
+
 	}
 	sum.x = sum.x / double(counter);
 	sum.y = sum.y / double(counter);
@@ -90,12 +47,12 @@ CvPoint find(cv::Mat matrix) {
 }
 
 void kill(int x) {
-	if (x >= 356)
-		game->makeAction(actions[1]); //right;
+	if (x >= 368)
+		game->makeAction(actions[1]);
 	else if (x <= 284)
-		game->makeAction(actions[0]); //left
+		game->makeAction(actions[0]);
 	else
-		game->makeAction(actions[2]); // shoot
+		game->makeAction(actions[2]);
 
 }
 
@@ -118,19 +75,13 @@ int main() {
 			auto state = game->getState();
 			auto screenBuf = state->screenBuffer;
 
-			//cvSetImageROI(image, CvRect rect);
-
-			//find_demon_and_kill(state);
 			std::memcpy(scr.data, state->screenBuffer->data(), state->screenBuffer->size());
 			cv::extractChannel(scr, greyscale, 1);
 			cv::threshold(greyscale, greyscale, 130, 255, cv::THRESH_BINARY);
-			//auto greyscale1 = greyscale(cvRect(0, 200, 640, 5));
+
 			CvPoint w = find(greyscale);
 			kill(w.x);
-			//cv::imshow("original", greyscale);
 
-
-			//sleep(sleepTime);
 			cvWaitKey(sleepTime);
 		}
 		sleep(sleepTime * 10);
