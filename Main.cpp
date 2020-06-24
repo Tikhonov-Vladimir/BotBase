@@ -10,34 +10,20 @@ using namespace vizdoom;
 DoomGame* game = new DoomGame();
 
 const std::vector<double> actions[4] = {
-	{ 1, 0, 0, 0 }, // left
-	{ 0, 1, 0, 0 }, // right
-	{ 0, 0, 1, 0 }, // delta
-	{ 0, 0, 0, 1 }, // ahead
+	{ 1, 0, 0, 0 }, 
+	{ 0, 1, 0, 0 }, 
+	{ 0, 0, 1, 0 }, 
+	{ 0, 0, 0, 1 }, 
 };
 
 void game_init() {
 	game->setViZDoomPath("../vizdoom/vizdoom");
 	game->setDoomGamePath("../vizdoom/freedoom2.wad");
-	game->loadConfig("../vizdoom/scenarios/task3.cfg"); // add configurations for game
-	game->setScreenResolution(RES_640X480); // разрешение
-	game->setLabelsBufferEnabled(1); // add this
-	game->setWindowVisible(0); // exception with Linux without X Series
-	game->setRenderWeapon(1); // is the gun will be in the game
+	game->loadConfig("../vizdoom/scenarios/task3.cfg"); 
+	game->setLabelsBufferEnabled(1); 
+	game->setRenderWeapon(1); 
 	game->setRenderHud(1);
 	game->init();
-}
-
-int find(cv::Mat screen) {
-	const int center = 320;
-	for (int y = 399; y > 150; --y)
-		for (int distance = 0; distance < 300; ++distance) {
-			if (screen.at<unsigned char>(y, center + distance) == 255)
-				return center + distance;
-			if (screen.at<unsigned char>(y, center - distance) == 255)
-				return center - distance;
-		}
-	return -1;
 }
 
 void _move(cv::Point i) {
@@ -61,7 +47,7 @@ void mksquare(cv::Mat& scr, const cv::Point2f& p, const int& channel, const int&
 			if ((i + p.x > -1) && (i + p.x < 640) && (j + p.y > -1) && (j + p.y < 480)) {
 				int dis = distance(p, cvPoint(i + p.x, j + p.y));
 				if (dis < maxr && dis > minr)
-					scr.at<cv::Vec3b>(j + p.y, i + p.x)[channel] = 255; //red
+					scr.at<cv::Vec3b>(j + p.y, i + p.x)[channel] = 255; 
 			}
 		}
 	}
@@ -115,8 +101,8 @@ int main() {
 						index = j;
 					}
 				}
-				//std::cout << centers[index].x << ' ' << centers[index].y << std::endl;
-				//cvWaitKey(500);
+				
+				
 				mksquare(scr, centers[index], 1, 6, 8);
 				_move(centers[index]);
 			}
