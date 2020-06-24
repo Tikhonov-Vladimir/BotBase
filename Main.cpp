@@ -8,6 +8,7 @@
 using namespace vizdoom;
 
 DoomGame* game = new DoomGame();
+size_t sleepTime = 1000 / DEFAULT_TICRATE;
 
 const std::vector<double> actions[4] = {
 	{ 1, 0, 0, 0 }, 
@@ -27,8 +28,13 @@ void game_init() {
 }
 
 void _move(cv::Point i) {
-	if (i.x == -1)
+	if (i.x == -1) {
+		for (int i = 0; i < 7; ++i) {
+			game->makeAction(actions[3]);
+			cvWaitKey(sleepTime);
+		}
 		game->makeAction(actions[2], 90);
+	}
 	if (i.x > 360)
 		game->makeAction(actions[1]);
 	else if (i.x < 280)
@@ -66,7 +72,6 @@ int main() {
 	cv::moveWindow("Changed", 720, 30);
 	int res = 0;
 	int episodes = 10;
-	size_t sleepTime = 1000 / DEFAULT_TICRATE;
 
 	for (int i = 0; i < episodes; ++i) {
 		std::cout << "Episode #" << i + 1 << std::endl;
