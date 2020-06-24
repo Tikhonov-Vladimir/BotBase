@@ -29,7 +29,7 @@ void game_init() {
 void _move(cv::Point i) {
 	if (i.x == -1)
 		game->makeAction(actions[2], 90);
-	if (i.x >360)
+	if (i.x > 360)
 		game->makeAction(actions[1]);
 	else if (i.x < 280)
 		game->makeAction(actions[0]);
@@ -38,7 +38,7 @@ void _move(cv::Point i) {
 }
 
 int distance(const cv::Point2f& a, const cv::Point2f& b) {
-	return int(sqrt(pow(abs(a.x - b.x), 2) + pow(abs(a.y - b.y), 2)));
+	return round(sqrt(pow(abs(a.x - b.x), 2) + pow(abs(a.y - b.y), 2)));
 }
 
 void mksquare(cv::Mat& scr, const cv::Point2f& p, const int& channel, const int& minr, const int& maxr) {
@@ -69,8 +69,8 @@ int main() {
 	size_t sleepTime = 1000 / DEFAULT_TICRATE;
 
 	for (int i = 0; i < episodes; ++i) {
-		game->newEpisode();
 		std::cout << "Episode #" << i + 1 << std::endl;
+		game->newEpisode();
 		while (!game->isEpisodeFinished()) {
 			auto state = game->getState();
 			auto screenBuf = state->screenBuffer;
@@ -87,7 +87,7 @@ int main() {
 			}
 			std::vector<cv::Point> centers;
 			cv::Mat mat;
-			if (needs_point.size() <= 9) {
+			if (needs_point.size() <= 7) {
 				_move(cvPoint(-1, -1));
 			}
 			else {
